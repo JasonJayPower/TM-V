@@ -9,6 +9,7 @@
 #include "System/Clock.hpp"
 #include "System/Time.hpp"
 
+
 // Allows forward Declare with unique_ptr
 App::App()  = default;
 App::~App() = default;
@@ -22,6 +23,7 @@ void App::setup() {
     // Add Scenes
     m_sceneMgr->addScene(SceneName::Title);
     m_sceneMgr->addScene(SceneName::Game);
+    m_sceneMgr->addScene(SceneName::Test);
     if (m_sceneMgr->isSceneStackEmpty()) {
         m_window.close();
     }
