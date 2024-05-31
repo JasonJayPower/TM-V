@@ -1,7 +1,5 @@
 #include "TitleScene.hpp"
 
-#include <SFML/Window/Keyboard.hpp>
-
 #include <iostream>
 
 #include "Input/Keyboard.hpp"
@@ -9,9 +7,6 @@
 
 TitleScene::TitleScene(SceneManager* sceneManager, SceneName name)
     : BaseScene{ sceneManager, name } {
-}
-
-TitleScene::~TitleScene() {
 }
 
 void TitleScene::input(const Keyboard& keyboard) {

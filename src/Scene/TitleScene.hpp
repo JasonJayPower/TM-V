@@ -13,7 +13,6 @@ class TitleScene final : public BaseScene
 {
   public:
     explicit TitleScene(SceneManager* sceneManager, SceneName name);
-    ~TitleScene();
 
     void input(const Keyboard& keyboard) override;
     void update() override;

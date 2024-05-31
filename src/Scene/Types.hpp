@@ -3,8 +3,9 @@
 enum class SceneName {
     Title = 0,
     Game,
+    Test,
     None,
-    Count  // Must be last
+    Count // Must be last
 };
 
 // Constexpr function to get the name of the scene as a string
