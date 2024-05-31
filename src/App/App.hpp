@@ -31,9 +31,8 @@ class App
     void render();
     void lateUpdate();
 
-    sf::RenderWindow m_window = { sf::VideoMode(640, 480), "" };
-    Keyboard m_keyboard       = {};
-
+    sf::RenderWindow m_window;
+    Keyboard m_keyboard;
     AssetManager<sf::Font, FontID> m_fontMgr;
     AssetManager<sf::Texture, TexID> m_textureMgr;
     std::unique_ptr<SceneManager> m_sceneMgr;

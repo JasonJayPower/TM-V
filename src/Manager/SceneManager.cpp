@@ -9,7 +9,7 @@
 #include "Scene/TitleScene.hpp"
 #include "Utils/EnumUtils.hpp"
 
-SceneManager::SceneManager(std::unique_ptr<ContextManager> contextMgr)
+SceneManager::SceneManager(ContextMgr contextMgr)
     : m_currentScene{ nullptr }
     , m_scenes      { Scenes(to_underlying(SceneName::Count) - 1) }
     , m_contextMgr  { std::move(contextMgr) }
@@ -92,8 +92,8 @@ void SceneManager::removeAllScenes() {
 std::unique_ptr<BaseScene> SceneManager::createScene(const SceneName name) {
     switch (name) {
         case SceneName::Title: return std::make_unique<TitleScene>(this, name);
-        case SceneName::Game: return std::make_unique<GameScene>(this, name);
-        case SceneName::Test: return std::make_unique<TestScene>(this, name);
+        case SceneName::Game:  return std::make_unique<GameScene>(this, name);
+        case SceneName::Test:  return std::make_unique<TestScene>(this, name);
         default: return nullptr;
     }
 }
