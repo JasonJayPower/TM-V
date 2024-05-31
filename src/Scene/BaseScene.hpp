@@ -2,6 +2,7 @@
 
 #include "Scene/Types.hpp"
 
+class ContextManager;
 class Keyboard;
 class SceneManager;
 
@@ -26,6 +27,7 @@ class BaseScene
     SceneName getName() const;
 
   protected:
+    const ContextManager* getContextMgr() const;
     void requestSceneChange(SceneRequest request) const;
 
   private:

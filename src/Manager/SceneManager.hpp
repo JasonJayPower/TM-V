@@ -9,15 +9,18 @@
 namespace sf {
     class RenderWindow;
 }
+
+class ContextManager;
 class Keyboard;
 
 class SceneManager
 {
-    using Scene  = std::unique_ptr<BaseScene>;
-    using Scenes = std::vector<Scene>;
+    using ContextMgr = std::unique_ptr<ContextManager>;
+    using Scene      = std::unique_ptr<BaseScene>;
+    using Scenes     = std::vector<Scene>;
 
   public:
-     SceneManager();
+    SceneManager(std::unique_ptr<ContextManager> contextMgr);
     ~SceneManager();
 
     void input(const Keyboard& keyboard) const;
@@ -31,6 +34,8 @@ class SceneManager
 
     bool isSceneStackEmpty() const;
 
+    const ContextManager* getContextMgr() const;
+
   private:
     void changeScene();
     void removeAllScenes();
@@ -39,5 +44,6 @@ class SceneManager
 
     BaseScene* m_currentScene;
     Scenes m_scenes;
+    ContextMgr m_contextMgr;
     SceneRequest m_sceneRequest;
 };

@@ -2,10 +2,12 @@
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
-
 #include <iostream>
 
+#include "Asset/Types.hpp"
 #include "Input/Keyboard.hpp"
+#include "Manager/AssetManager.hpp"
+#include "Manager/ContextManager.hpp"
 #include "Scene/Types.hpp"
 
 TestScene::TestScene(SceneManager* sceneManager, SceneName name)
@@ -14,7 +16,7 @@ TestScene::TestScene(SceneManager* sceneManager, SceneName name)
 
 void TestScene::input(const Keyboard& keyboard) {
     if (keyboard.checkKey(Keyboard::Key::A, KeyState::Press)) {
-        requestSceneChange({ SceneAction::RemoveAll, SceneName::Game });
+        requestSceneChange({ SceneAction::RemoveAll });
     }
 }
 
@@ -35,13 +37,15 @@ void TestScene::onExit() {
 }
 
 void TestScene::onCreate() {
-    m_texMgr.load(TexID::TextureA, "assets/texture/a.png");
-    m_fontMgr.load(FontID::FontA, "assets/font/a.ttf");
+    auto texMgr = getContextMgr()->textureMgr;
 
-    m_sprite.setTexture(m_texMgr.get(TexID::TextureA));
+    m_sprite.setTexture(texMgr->get(TexID::TextureA));
     m_sprite.setPosition(100.f, 100.f);
 
-    m_text.setFont(m_fontMgr.get(FontID::FontA));
+
+    auto fontMgr = getContextMgr()->fontMgr;
+
+    m_text.setFont(fontMgr->get(FontID::FontA));
     m_text.setColor(sf::Color::Red);
     m_text.setString("Testing Font");
     m_text.setCharacterSize(20);

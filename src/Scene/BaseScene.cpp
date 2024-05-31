@@ -11,6 +11,10 @@ SceneName BaseScene::getName() const {
     return m_name;
 }
 
+const ContextManager* BaseScene::getContextMgr() const {
+    return m_sceneManager->getContextMgr();
+}
+
 void BaseScene::requestSceneChange(SceneRequest request) const {
     m_sceneManager->requestSceneChange(request);
 }

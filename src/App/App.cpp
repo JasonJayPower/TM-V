@@ -1,24 +1,45 @@
 #include "App/App.hpp"
 
+#include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Window.hpp>
 
+#include "Manager/ContextManager.hpp"
 #include "Manager/SceneManager.hpp"
 #include "Scene/Types.hpp"
 #include "System/Clock.hpp"
 #include "System/Time.hpp"
 
-
 // Allows forward Declare with unique_ptr
-App::App()  = default;
+App::App()
+    : m_window    { sf::RenderWindow(sf::VideoMode(640, 480), "") }
+    , m_keyboard  {}
+    , m_fontMgr   {}
+    , m_textureMgr{}
+    , m_sceneMgr  { nullptr }
+{
+}
+
 App::~App() = default;
 
 void App::setup() {
     m_window.setKeyRepeatEnabled(false);
 
-    // Create / Load Asset stuff
-    m_sceneMgr = std::make_unique<SceneManager>();
+    // Create / load all assets
+    m_fontMgr.load(FontID::FontA, "assets/font/a.ttf");
+
+    m_textureMgr.load(TexID::TextureA, "assets/texture/a.png");
+
+
+    // Create the SceneManager with ContextManager
+    std::unique_ptr<ContextManager> contextMgr = std::make_unique<ContextManager>();
+
+    contextMgr->fontMgr    = &m_fontMgr;
+    contextMgr->textureMgr = &m_textureMgr;
+
+    m_sceneMgr = std::make_unique<SceneManager>(std::move(contextMgr));
 
     // Add Scenes
     m_sceneMgr->addScene(SceneName::Title);

@@ -3,15 +3,17 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 
 #include "Input/Keyboard.hpp"
+#include "Manager/ContextManager.hpp"
 #include "Scene/GameScene.hpp"
 #include "Scene/TestScene.hpp"
 #include "Scene/TitleScene.hpp"
 #include "Utils/EnumUtils.hpp"
 
-SceneManager::SceneManager()
+SceneManager::SceneManager(ContextMgr contextMgr)
     : m_currentScene{ nullptr }
     , m_scenes      { Scenes(to_underlying(SceneName::Count) - 1) }
-    , m_sceneRequest{} {
+    , m_contextMgr  { std::move(contextMgr) }
+    , m_sceneRequest{ } {
 }
 
 SceneManager::~SceneManager() = default;
@@ -49,6 +51,10 @@ void SceneManager::requestSceneChange(const SceneRequest request) {
 
 bool SceneManager::isSceneStackEmpty() const {
     return m_scenes.empty();
+}
+
+const ContextManager* SceneManager::getContextMgr() const {
+    return m_contextMgr.get();
 }
 
 void SceneManager::addScene(const SceneName name) {
