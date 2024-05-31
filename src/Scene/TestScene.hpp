@@ -32,7 +32,4 @@ class TestScene final : public BaseScene
   private:
     sf::Sprite m_sprite;
     sf::Text m_text;
-
-    AssetManager<sf::Font, FontID>   m_fontMgr;
-    AssetManager<sf::Texture, TexID> m_texMgr;
 };

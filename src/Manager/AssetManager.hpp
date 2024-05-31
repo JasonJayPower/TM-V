@@ -2,6 +2,7 @@
 
 #include <memory>
 
+
 template <typename T, typename E>
 class AssetManager
 {

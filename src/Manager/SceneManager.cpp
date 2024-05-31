@@ -3,15 +3,17 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 
 #include "Input/Keyboard.hpp"
+#include "Manager/ContextManager.hpp"
 #include "Scene/GameScene.hpp"
 #include "Scene/TestScene.hpp"
 #include "Scene/TitleScene.hpp"
 #include "Utils/EnumUtils.hpp"
 
-SceneManager::SceneManager()
+SceneManager::SceneManager(std::unique_ptr<ContextManager> contextMgr)
     : m_currentScene{ nullptr }
     , m_scenes      { Scenes(to_underlying(SceneName::Count) - 1) }
-    , m_sceneRequest{} {
+    , m_contextMgr  { std::move(contextMgr) }
+    , m_sceneRequest{ } {
 }
 
 SceneManager::~SceneManager() = default;
@@ -51,6 +53,10 @@ bool SceneManager::isSceneStackEmpty() const {
     return m_scenes.empty();
 }
 
+const ContextManager* SceneManager::getContextMgr() const {
+    return m_contextMgr.get();
+}
+
 void SceneManager::addScene(const SceneName name) {
     const auto index = to_underlying(name);
     if (name != SceneName::None && m_scenes[index] == nullptr) {
@@ -86,8 +92,8 @@ void SceneManager::removeAllScenes() {
 std::unique_ptr<BaseScene> SceneManager::createScene(const SceneName name) {
     switch (name) {
         case SceneName::Title: return std::make_unique<TitleScene>(this, name);
-        case SceneName::Game:  return std::make_unique<GameScene>(this, name);
-        case SceneName::Test:  return std::make_unique<TestScene>(this, name);
+        case SceneName::Game: return std::make_unique<GameScene>(this, name);
+        case SceneName::Test: return std::make_unique<TestScene>(this, name);
         default: return nullptr;
     }
 }
