@@ -1,14 +1,11 @@
 #pragma once
 
-#include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
-#include <SFML/Graphics/Texture.hpp>
 
-#include "Asset/Types.hpp"
-#include "Manager/AssetManager.hpp"
 #include "Scene/BaseScene.hpp"
 #include "Scene/Types.hpp"
+#include "System/Types.hpp"
 
 class Keyboard;
 
@@ -30,6 +27,30 @@ class TestScene final : public BaseScene
     void onDestroy() override;
 
   private:
-    sf::Sprite m_sprite;
+    enum class Axis { Horizontal, Vertical };
+
+    bool checkForCollision(sf::FloatRect& bounds, Axis axis);
+
+    struct Player {
+        sf::Vector2f pos;
+        sf::Sprite   spr;
+        sf::FloatRect aabb;
+    };
+
+    struct Level {
+        sf::Sprite spr;
+        std::vector<std::vector<u8>> tiles{
+            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+            { 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1 },
+            { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+            { 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1 }, 
+            { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }, 
+            { 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1 },
+            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        };
+    };
+
+    Player m_player;
+    Level m_level;
     sf::Text m_text;
 };
