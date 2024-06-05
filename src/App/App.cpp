@@ -45,6 +45,7 @@ void App::setup() {
     m_sceneMgr->addScene(SceneName::Title);
     m_sceneMgr->addScene(SceneName::Game);
     m_sceneMgr->addScene(SceneName::Test);
+    m_sceneMgr->addScene(SceneName::SceneRS01);
     if (m_sceneMgr->isSceneStackEmpty()) {
         m_window.close();
     }

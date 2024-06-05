@@ -4,6 +4,7 @@ enum class SceneName {
     Title = 0,
     Game,
     Test,
+    SceneRS01,
     None,
     Count // Must be last
 };
@@ -13,6 +14,7 @@ inline constexpr const char* getSceneName(SceneName name) {
     switch (name) {
         case SceneName::Title: return "Title";
         case SceneName::Game: return "Game";
+        case SceneName::SceneRS01: return "Scene RS 01";
         case SceneName::None: return "None";
         default: return "SceneName::Unknown";
     }

@@ -6,6 +6,7 @@
 #include "Manager/ContextManager.hpp"
 #include "Scene/GameScene.hpp"
 #include "Scene/TestScene.hpp"
+#include "Scene/SceneRS01.hpp"
 #include "Scene/TitleScene.hpp"
 #include "Utils/EnumUtils.hpp"
 
@@ -94,6 +95,7 @@ std::unique_ptr<BaseScene> SceneManager::createScene(const SceneName name) {
         case SceneName::Title: return std::make_unique<TitleScene>(this, name);
         case SceneName::Game:  return std::make_unique<GameScene>(this, name);
         case SceneName::Test:  return std::make_unique<TestScene>(this, name);
+        case SceneName::SceneRS01: return std::make_unique<SceneRS01>(this, name);
         default: return nullptr;
     }
 }
