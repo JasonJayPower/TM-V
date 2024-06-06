@@ -4,7 +4,7 @@
 
 template <typename T, typename E>
 class AssetManager
-{
+{// 'Using' here is alias. 'Assets' is 'generic' array, destroyed when out of scope
     using Assets = std::unique_ptr<T[]>;
 
   public:
