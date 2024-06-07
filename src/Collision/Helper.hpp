@@ -5,6 +5,9 @@
 #include "System/Types.hpp"
 
 namespace AABB {
+
+    enum class Axis { Vert, Hori };
+
     inline f32 resolveHorizontal(const sf::FloatRect& r1, const sf::FloatRect& r2) {
         return r1.left < r2.left ? (r2.left - r1.width) : (r2.left + r2.width);
     }
