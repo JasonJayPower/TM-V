@@ -11,16 +11,37 @@ sf::Vector2f Player::getCenter() const {
 }
 
 void Player::handleInput(const Keyboard& keyboard) {
+    // Press Left and Right Keys to move horizontally
     if (keyboard.checkKey(Keyboard::Key::Left, KeyState::Hold)) {
-        m_pos.x = -2.f;
+        m_pos.x = -1.5f;
     } else if (keyboard.checkKey(Keyboard::Key::Right, KeyState::Hold)) {
-        m_pos.x = 2.f;
+        m_pos.x = 1.5f;
     }
 
+    // Hold Up Key to Hover, you have 20 frames (1/3 of a second)
     if (keyboard.checkKey(Keyboard::Key::Up, KeyState::Hold)) {
-        m_pos.y = -2.f;
-    } else if (keyboard.checkKey(Keyboard::Key::Down, KeyState::Hold)) {
-        m_pos.y = 2.f;
+        // Can only use Hover when jumping and not falling
+        if (m_state == State::InAir && m_pos.y < 0.f) {
+            m_state     = State::Hovering;
+            m_hoverTime = MaxHoverTime;
+            m_pos.y     = 0.f;
+        } else if (m_state == State::Hovering) {
+            --m_hoverTime;
+            if (m_hoverTime < 0) {
+                m_state     = State::InAir;
+                m_hoverTime = 0;
+            }
+        }
+    } else if (keyboard.checkKey(Keyboard::Key::Up, KeyState::Release)) {
+        m_state = State::InAir;
+    }
+
+    // Press Space Key to Jump
+    if (keyboard.checkKey(Keyboard::Key::Space, KeyState::Press)) {
+        if (m_state == State::OnGround) {
+            m_state = State::InAir;
+            m_pos.y = -4.f;
+        }
     }
 }
 
@@ -32,17 +53,23 @@ void Player::update(const Level& level) {
         bounds.left += m_pos.x;
         handleLevelCollision(level, bounds, AABB::Axis::Hori);
     }
-    if (m_pos.y != 0) {
+
+    // Disable Gravity / Collisions on the Y Axis while hovering
+    if (m_state != State::Hovering) {
+        m_state = State::InAir;
+        m_pos.y += Gravity;
         bounds.top += m_pos.y;
         handleLevelCollision(level, bounds, AABB::Axis::Vert);
     }
+
+    // Wrapping around the screen checks
     if (bounds.left < 8.f) {
         bounds.left = 432.f;
-    } else if (bounds.left > 440.f ) {
+    } else if (bounds.left > 440.f) {
         bounds.left = 16.f;
     }
     m_sprite.setPosition(bounds.left, bounds.top);
-    m_pos = {};
+    m_pos.x = 0.f;
 }
 
 void Player::draw(sf::RenderWindow& window) {
@@ -63,8 +90,13 @@ f32 Player::handleLevelCollision(const Level& level, sf::FloatRect& pBounds, AAB
                 tBounds.left = static_cast<float>(col * Tile::Size);
                 tBounds.top  = static_cast<float>(row * Tile::Size);
                 if (pBounds.intersects(tBounds)) {
-                    axis == AABB::Axis::Hori ? pBounds.left = AABB::resolveHorizontal(pBounds, tBounds)
-                                             : pBounds.top  = AABB::resolveVertical(pBounds, tBounds);
+                    if (axis == AABB::Axis::Hori) {
+                        pBounds.left = AABB::resolveHorizontal(pBounds, tBounds);
+                    } else {
+                        pBounds.top = AABB::resolveVertical(pBounds, tBounds);
+                        m_state     = State::OnGround;
+                        m_pos.y     = 0.f;
+                    }
                     return true;
                 }
             }
