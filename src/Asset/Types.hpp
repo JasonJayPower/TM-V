@@ -4,7 +4,9 @@
 
 enum class TexID : u8 {
 	TextureA = 0,
-
+    TextureB,
+    TextureC,
+    TextureD,
 	Count // Must be last
 };
 

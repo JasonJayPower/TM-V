@@ -1,15 +1,13 @@
 #pragma once
 
-#include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Sprite.hpp>
-#include <SFML/Graphics/Text.hpp>
-#include <SFML/Graphics/Texture.hpp>
+#include <memory>
 
-#include "Asset/Types.hpp"
-#include "Manager/AssetManager.hpp"
+#include "Game/Camera.hpp"
+#include "Game/Level.hpp"
+#include "Game/Player.hpp"
 #include "Scene/BaseScene.hpp"
 #include "Scene/Types.hpp"
-
 class Keyboard;
 
 namespace sf {
@@ -30,6 +28,7 @@ class TestScene final : public BaseScene
     void onDestroy() override;
 
   private:
-    sf::Sprite m_sprite;
-    sf::Text m_text;
+    std::unique_ptr<Camera> m_camera;
+    std::unique_ptr<Player> m_player;
+    std::unique_ptr<Level> m_level;
 };

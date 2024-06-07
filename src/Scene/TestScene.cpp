@@ -1,31 +1,38 @@
 #include "TestScene.hpp"
 
-#include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <iostream>
 
 #include "Asset/Types.hpp"
 #include "Input/Keyboard.hpp"
-#include "Manager/AssetManager.hpp"
-#include "Manager/ContextManager.hpp"
 #include "Scene/Types.hpp"
+
+#include "Manager/ContextManager.hpp"
+#include "Manager/AssetManager.hpp"
 
 TestScene::TestScene(SceneManager* sceneManager, SceneName name)
     : BaseScene{ sceneManager, name } {
 }
 
 void TestScene::input(const Keyboard& keyboard) {
-    if (keyboard.checkKey(Keyboard::Key::A, KeyState::Press)) {
-        requestSceneChange({ SceneAction::RemoveAll });
-    }
+    //if (keyboard.checkKey(Keyboard::Key::Escape, KeyState::Press)) {
+    //    requestSceneChange({ SceneAction::RemoveAll });
+    //}
+    m_player->handleInput(keyboard);
 }
 
 void TestScene::update() {
+    m_player->update(*m_level.get());
+
+    m_camera->update(m_player->getCenter());
 }
 
 void TestScene::render(sf::RenderWindow& window) {
-    window.draw(m_sprite);
-    window.draw(m_text);
+
+    window.setView(m_camera->getView());
+    m_player->draw(window);
+    m_level->draw(window);
 }
 
 void TestScene::onEnter() {
@@ -33,23 +40,20 @@ void TestScene::onEnter() {
 }
 
 void TestScene::onExit() {
+    
     std::cout << "TestScene -> On Exit \n";
 }
 
 void TestScene::onCreate() {
     auto texMgr = getContextMgr()->textureMgr;
 
-    m_sprite.setTexture(texMgr->get(TexID::TextureA));
-    m_sprite.setPosition(100.f, 100.f);
+    m_player = std::make_unique<Player>(texMgr->get(TexID::TextureB));
 
+    m_level = std::make_unique<Level>(texMgr->get(TexID::TextureA));
+    m_level->loadLevel();
 
-    auto fontMgr = getContextMgr()->fontMgr;
+    m_camera = std::make_unique<Camera>(sf::Vector2u{ 400, 224 }, sf::Vector2u{ 400, 256 });
 
-    m_text.setFont(fontMgr->get(FontID::FontA));
-    m_text.setColor(sf::Color::Red);
-    m_text.setString("Testing Font");
-    m_text.setCharacterSize(20);
-    m_text.setPosition(50, 50);
 
     std::cout << "TestScene -> On Create \n";
 }

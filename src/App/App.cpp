@@ -14,23 +14,22 @@
 
 // Allows forward Declare with unique_ptr
 App::App()
-    : m_window    { sf::RenderWindow(sf::VideoMode(640, 480), "") }
+    : m_window    { sf::RenderWindow(sf::VideoMode(400, 224), "") }
     , m_keyboard  {}
     , m_fontMgr   {}
     , m_textureMgr{}
-    , m_sceneMgr  { nullptr }
-{
+    , m_sceneMgr  { nullptr } {
 }
 
 App::~App() = default;
 
 void App::setup() {
     m_window.setKeyRepeatEnabled(false);
+    m_window.setView(sf::View({ 32.f, 0.f, 400.f, 224.f }));
 
     // Create / load all assets
-    m_fontMgr.load(FontID::FontA, "assets/font/a.ttf");
-
     m_textureMgr.load(TexID::TextureA, "assets/texture/a.png");
+    m_textureMgr.load(TexID::TextureB, "assets/texture/b.png");
 
 
     // Create the SceneManager with ContextManager
@@ -90,7 +89,7 @@ void App::update() {
 }
 
 void App::render() {
-    m_window.clear();
+    m_window.clear(sf::Color::Green);
     m_sceneMgr->render(m_window);
     m_window.display();
 }
