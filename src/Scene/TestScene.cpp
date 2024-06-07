@@ -5,7 +5,6 @@
 #include <iostream>
 
 #include "Asset/Types.hpp"
-#include "Math/Math.hpp"
 #include "Input/Keyboard.hpp"
 #include "Scene/Types.hpp"
 
