@@ -4,7 +4,7 @@ Camera::Camera(const sf::Vector2u& viewSize, const sf::Vector2u& worldSize)
     : m_target      { 0, 0 }
     , m_halfViewSize{ sf::Vector2u(viewSize.x * 0.5f, viewSize.y * 0.5f) }
     , m_worldSize   { worldSize }
-    , m_view        { { 32.f, 0.f, f32(viewSize.x), f32(viewSize.y) } } {
+    , m_view        { { 48.f, 0.f, f32(viewSize.x), f32(viewSize.y) } } {
 }
 
 void Camera::update(const sf::Vector2f& target) {
