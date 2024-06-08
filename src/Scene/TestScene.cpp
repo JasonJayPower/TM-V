@@ -23,7 +23,7 @@ void TestScene::input(const Keyboard& keyboard) {
 }
 
 void TestScene::update() {
-    m_player->update(*m_level.get());
+    m_player->update();
 
     m_camera->update(m_player->getCenter());
 }
@@ -33,6 +33,8 @@ void TestScene::render(sf::RenderWindow& window) {
     window.setView(m_camera->getView());
     m_player->draw(window);
     m_level->draw(window);
+    // Reset View for GUI stuff
+    // window.setView(window.getDefaultView());
 }
 
 void TestScene::onEnter() {
@@ -50,10 +52,8 @@ void TestScene::onCreate() {
     m_player = std::make_unique<Player>(texMgr->get(TexID::TextureB));
 
     m_level = std::make_unique<Level>(texMgr->get(TexID::TextureA));
-    m_level->loadLevel();
 
-    m_camera = std::make_unique<Camera>(sf::Vector2u{ 400, 224 }, sf::Vector2u{ 400, 256 });
-
+    m_camera = std::make_unique<Camera>(sf::Vector2u{ 400, 224 }, sf::Vector2u{ 400, 272 });
 
     std::cout << "TestScene -> On Create \n";
 }
